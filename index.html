@@ -1,0 +1,178 @@
+<iframe
+  width="100%"
+  height="1000"
+  style="border:0;background:#f8f9fa;"
+  loading="lazy"
+  referrerpolicy="no-referrer"
+  src="about:blank?src=https://cdn.jsdelivr.net/gh/aandronic95/maps@main/md.json"
+  srcdoc='<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/aandronic95/maps@main/style.css">
+  <style>
+    html,body{margin:0;height:100%}
+    .moldova-map-container{height:100%}
+    .region{cursor:pointer}
+
+  </style>
+</head>
+<body>
+  <div class="moldova-map-container">
+    <svg id="moldova-map"></svg>
+  </div>
+<style>
+  .center-faded { text-align: center; opacity: .5; }
+</style>
+
+<h6 class="center-faded">Direcția tehnologii informaționale și comunicații</h6>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script>
+  (function(){
+    const regionUrls = {
+       MDAN: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-anenii-noi",
+        MDBA: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-balti",
+        MDBS: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-basarabeasca",
+        MDBD: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-bender",
+        MDBR: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-briceni",
+        MDCA: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-cahul",
+        MDCL: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-calarasi",
+        MDCN: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-cantemir",
+        MDCS: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-causeni",
+        MDCH: "https://politia.md/ro/functii-vacante-politienesti/directia-de-politie-municipiului-chisinau",
+        MDCM: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-cimislia",
+        MDCR: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-criuleni",
+        MDDO: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-donduseni",
+        MDDR: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-drochia",
+        MDDU: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-dubasari",
+        MDED: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-edinet",
+        MDFA: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-falesti",
+        MDFL: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-floresti",
+        MDGL: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-glodeni",
+        MDHI: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-hincesti",
+        MDIA: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-ialoveni",
+        MDLE: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-leova",
+        MDNI: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-nisporeni",
+        MDOC: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-ocnita",
+        MDOR: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-orhei",
+        MDRE: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-rezina",
+        MDRI: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-riscani",
+        MDSI: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-singerei",
+        MDSO: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-soldanesti",
+        MDSR: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-soroca",
+        MDSV: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-stefan-voda",
+        MDST: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-straseni",
+        MDTA: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-taraclia",
+        MDTE: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-telenesti",
+        MDUN: "https://politia.md/ro/functii-politienesti-transfer/inspectoratul-de-politie-ungheni",
+        MDGA: "https://politia.md/ro/functii-politienesti-transfer/directia-de-politie-uta-gagauzia",
+    };
+
+    const regionNames = {
+      MDAN:"IP Anenii Noi", MDBA:"IP Bălți", MDBS:"IP Basarabeasca", MDBD:"IP Bender", MDBR:"IP Briceni",
+      MDCA:"IP Cahul", MDCL:"IP Călărași", MDCN:"IP Cantemir", MDCS:"IP Căușeni", MDCH:"IP Chișinău",
+      MDCM:"IP Cimișlia", MDCR:"IP Criuleni", MDDO:"IP Dondușeni", MDDR:"IP Drochia", MDDU:"IP Dubăsari",
+      MDED:"IP Edineț", MDFA:"IP Fălești", MDFL:"IP Florești", MDGL:"IP Glodeni", MDHI:"IP Hîncești",
+      MDIA:"IP Ialoveni", MDLE:"IP Leova", MDNI:"IP Nisporeni", MDOC:"IP Ocnița", MDOR:"IP Orhei",
+      MDRE:"IP Rezina", MDRI:"IP Rîșcani", MDSI:"IP Sîngerei", MDSO:"IP Șoldănești", MDSR:"IP Soroca",
+      MDSV:"IP Ștefan Vodă", MDST:"IP Strășeni", MDTA:"IP Taraclia", MDTE:"IP Telenești",
+      MDTN:"Transnistria", MDUN:"IP Ungheni", MDGA:"UTA Gagauzia"
+    };
+
+    const regionShortNames = Object.assign({}, regionNames, { MDSV: "Ș.Vodă" });
+
+    const customPositions = {
+      MDCR:{x:-10,y:-15}, MDBD:{x:0,y:0}, MDGA:{x:10,y:-25}, MDDU:{x:-10,y:-20}, MDTA:{x:-10,y:10}
+    };
+
+    const Q = new URLSearchParams(window.location.search);
+    const DATA_URL = Q.get("src") || "https://cdn.jsdelivr.net/gh/aandronic95/maps@main/md.json";
+    const TARGET_PREFIX = Q.get("target") || "";
+    const OPEN_SELF = (Q.get("tab") === "self");
+
+    const slugify = (s) =>
+      String(s).normalize("NFD")
+        .replace(/[\u0300-\u036f]/g,"") // diacritice
+        .replace(/[șşś]/gi,"s").replace(/[țţť]/gi,"t")
+        .replace(/[ăâàáä]/gi,"a").replace(/[îïí]/gi,"i")
+        .replace(/[^a-z0-9]+/gi,"-").replace(/^-+|-+$/g,"").toLowerCase();
+
+    const getCode = (d) => d?.properties?.id || d?.id || ""; // dacă md.json are "id" în properties
+
+    (async function render(){
+      const svg = d3.select("#moldova-map");
+      const container = document.querySelector(".moldova-map-container");
+      const W = container.clientWidth, H = container.clientHeight;
+
+      svg.attr("width", W).attr("height", H);
+      const g = svg.append("g");
+
+      const geo = await d3.json(DATA_URL);
+      const features = (geo && geo.features) ? geo.features : [];
+
+      const projection = d3.geoMercator().fitSize([W, H], geo);
+      const path = d3.geoPath(projection);
+
+      // Zone
+      g.selectAll("path")
+        .data(features)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("class", "region")
+        .on("click", (ev, d) => {
+          const code = getCode(d);
+          const nm = regionNames[code] || d?.properties?.name || d?.properties?.NUME || "raion";
+          let dest = regionUrls[code];
+          if (!dest && TARGET_PREFIX) dest = TARGET_PREFIX + slugify(nm);
+          if (dest) {
+            if (OPEN_SELF) location.href = dest;
+            else window.open(dest, "_blank", "noopener");
+          }
+        })
+        .append("title")
+        .text(d => {
+          const code = getCode(d);
+          return regionNames[code] || d?.properties?.name || d?.properties?.NUME || "Raion";
+        });
+
+      g.selectAll("text")
+        .data(features)
+        .enter()
+        .append("text")
+        .attr("class", d => {
+          const b = path.bounds(d);
+          const size = Math.min(b[1][0]-b[0][0], b[1][1]-b[0][1]);
+          return size < 50 ? "region-label-small" : "region-label";
+        })
+        .attr("x", d => {
+          const c = path.centroid(d), code = getCode(d), cp = customPositions[code];
+          return cp ? c[0] + cp.x : c[0];
+        })
+        .attr("y", d => {
+          const c = path.centroid(d), code = getCode(d), cp = customPositions[code];
+          return cp ? c[1] + cp.y : c[1];
+        })
+        .attr("dy","0.35em")
+        .text(d => {
+          const code = getCode(d);
+          const nm = regionNames[code] || d?.properties?.name || d?.properties?.NUME || code || "";
+          const b = path.bounds(d);
+          const size = Math.min(b[1][0]-b[0][0], b[1][1]-b[0][1]);
+          const isSmall = size < 50;
+          return isSmall ? (regionShortNames[code] || nm) : nm;
+        });
+
+      // Zoom / pan
+      svg.call(d3.zoom().scaleExtent([1, 8]).on("zoom", e => g.attr("transform", e.transform)));
+
+      // Refit rapid — reîncarcă iFrame la resize (evită calcule complexe)
+      window.addEventListener("resize", () => location.reload());
+    })();
+  })();
+  </script>
+
+</body>
+</html>'>
+</iframe>

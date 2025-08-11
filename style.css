@@ -4,15 +4,15 @@
 }
 .region {
     fill: #e8f4f8;
-    stroke: #2c5aa0;
+    stroke: #0f4b91;
     stroke-width: 1;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.5s ease;
 }
 .region:hover {
-    fill: #4dabf7;
-    stroke: #1971c2;
-    stroke-width: 2;
+    fill: #0f4b91;
+    stroke: #0f4b91;
+    stroke-width: 5;
 }
 .region-label {
     font-family: Arial, sans-serif;
@@ -47,3 +47,4 @@
         font-size: 6px;
     }
 }
+.center-faded { text-align: center; opacity: .5; }

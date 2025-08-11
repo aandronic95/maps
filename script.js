@@ -129,7 +129,7 @@
         return 'region';
     }
     // Get the JSON data URL for your Drupal site
-    const jsonUrl = 'https://raw.githubusercontent.com/aandronic95/maps/main/md.json'; // Adjust this path for your Drupal setup
+    const jsonUrl = 'https://cdn.jsdelivr.net/gh/aandronic95/maps@main/md.json'; // Adjust this path for your Drupal setup
     fetch(jsonUrl)
         .then(response => {
             if (!response.ok) {
